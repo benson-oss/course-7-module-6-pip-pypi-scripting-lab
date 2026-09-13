@@ -2,15 +2,6 @@ from datetime import datetime
 import requests
 
 
-log_data = [
-    "User logged in",
-    "User updated profile",
-    "Report exported"
-]
-
-filename = f"log_{datetime.now().strftime('%Y%m%d')}.txt"
-
-
 def fetch_data():
     response = requests.get(
         "https://jsonplaceholder.typicode.com/posts/1"
@@ -22,20 +13,26 @@ def fetch_data():
     return {}
 
 
-def generate_log(post):
+def generate_log(log_data):
+    filename = f"log_{datetime.now().strftime('%Y%m%d')}.txt"
+
     with open(filename, "w") as file:
         for entry in log_data:
             file.write(f"{entry}\n")
 
-        file.write("\nAPI Data\n")
-        file.write(f"Title: {post.get('title', 'No title found')}\n")
-        file.write(f"Body: {post.get('body', 'No body found')}\n")
+    return filename
 
 
 if __name__ == "__main__":
-    post = fetch_data()
+    log_data = [
+        "User logged in",
+        "User updated profile",
+        "Report exported"
+    ]
 
-    generate_log(post)
+    filename = generate_log(log_data)
+
+    post = fetch_data()
 
     print(f"Log written to {filename}")
     print("Fetched Post Title:", post.get("title", "No title found"))
